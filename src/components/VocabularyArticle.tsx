@@ -2,23 +2,21 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface VocabularyArticleProps {
-  words: {
-    word: string;
-    definition: string;
-  }[];
+  word: string;
+  definition: string;
 }
 
-const VocabularyArticle = ({ words }: VocabularyArticleProps) => {
-  // This would typically come from an API, but for now we'll use a sample article
-  const article = `In a remarkable display of perseverance, scientists have made groundbreaking discoveries 
-    in environmental conservation. Their dedication to protecting our planet's resources has led to innovative 
-    solutions for sustainability. Through careful observation and analysis, researchers continue to develop new 
-    methods for preserving our natural environment.`;
+const VocabularyArticle = ({ word, definition }: VocabularyArticleProps) => {
+  // Generate a contextual article based on the current word
+  const article = `In a recent study about learning methods, researchers observed the importance of ${word.toLowerCase()} 
+    in achieving academic success. Students who demonstrated ${word.toLowerCase()} in their studies showed remarkable progress. 
+    The study defines ${word.toLowerCase()} as "${definition}". This quality proved essential for overcoming challenges 
+    and reaching educational goals.`;
 
   const discussionQuestions = [
-    "How does perseverance play a role in scientific research?",
-    "What are some examples of dedication you've seen in your own life?",
-    "Why is observation important in scientific studies?",
+    `How does ${word.toLowerCase()} contribute to success in learning?`,
+    `Can you share a personal experience where you demonstrated ${word.toLowerCase()}?`,
+    `Why is ${word.toLowerCase()} important in everyday life?`,
   ];
 
   return (

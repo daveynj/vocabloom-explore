@@ -108,7 +108,10 @@ const Index = () => {
           options={currentWord.quizOptions}
         />
 
-        <VocabularyArticle words={vocabularyList} />
+        <VocabularyArticle 
+          word={currentWord.word}
+          definition={currentWord.definition}
+        />
       </div>
     </div>
   );
