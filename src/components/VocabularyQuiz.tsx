@@ -42,7 +42,7 @@ const VocabularyQuiz = ({ word, correctDefinition, options }: QuizProps) => {
             key={index}
             onClick={() => handleAnswer(option)}
             disabled={selectedAnswer !== null}
-            className={`w-full p-6 text-left text-lg leading-relaxed ${getButtonClass(option)}`}
+            className={`w-full min-h-[80px] p-4 text-left text-base leading-relaxed whitespace-normal break-words ${getButtonClass(option)}`}
           >
             {option}
           </Button>
