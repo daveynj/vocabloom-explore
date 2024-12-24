@@ -1,6 +1,7 @@
 import React from "react";
 import WordCard from "@/components/WordCard";
 import VocabularyQuiz from "@/components/VocabularyQuiz";
+import VocabularyArticle from "@/components/VocabularyArticle";
 
 // This would typically come from an API or database
 const sampleWord = {
@@ -18,10 +19,26 @@ const sampleWord = {
   ],
 };
 
+// Sample vocabulary list for the article
+const vocabularyList = [
+  {
+    word: "Perseverance",
+    definition: "Continued effort to do or achieve something despite difficulties",
+  },
+  {
+    word: "Dedication",
+    definition: "The quality of being committed to a task or purpose",
+  },
+  {
+    word: "Observation",
+    definition: "The action or process of carefully watching or monitoring something",
+  },
+];
+
 const Index = () => {
   return (
     <div className="min-h-screen bg-secondary/50 py-8 px-4">
-      <div className="container mx-auto space-y-8">
+      <div className="container mx-auto space-y-12">
         <h1 className="text-4xl font-bold text-center text-primary mb-8">
           ESL Vocabulary Practice
         </h1>
@@ -37,6 +54,8 @@ const Index = () => {
           correctDefinition={sampleWord.definition}
           options={sampleWord.quizOptions}
         />
+
+        <VocabularyArticle words={vocabularyList} />
       </div>
     </div>
   );
