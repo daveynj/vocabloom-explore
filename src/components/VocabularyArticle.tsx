@@ -6,17 +6,17 @@ interface VocabularyArticleProps {
   definition: string;
 }
 
-const VocabularyArticle = ({ word, definition }: VocabularyArticleProps) => {
+const VocabularyArticle = ({ word = "", definition = "" }: VocabularyArticleProps) => {
   // Generate a contextual article based on the current word
-  const article = `In a recent study about learning methods, researchers observed the importance of ${word.toLowerCase()} 
-    in achieving academic success. Students who demonstrated ${word.toLowerCase()} in their studies showed remarkable progress. 
-    The study defines ${word.toLowerCase()} as "${definition}". This quality proved essential for overcoming challenges 
+  const article = `In a recent study about learning methods, researchers observed the importance of ${word?.toLowerCase() || "learning"} 
+    in achieving academic success. Students who demonstrated ${word?.toLowerCase() || "this quality"} in their studies showed remarkable progress. 
+    The study defines ${word?.toLowerCase() || "it"} as "${definition}". This quality proved essential for overcoming challenges 
     and reaching educational goals.`;
 
   const discussionQuestions = [
-    `How does ${word.toLowerCase()} contribute to success in learning?`,
-    `Can you share a personal experience where you demonstrated ${word.toLowerCase()}?`,
-    `Why is ${word.toLowerCase()} important in everyday life?`,
+    `How does ${word?.toLowerCase() || "this quality"} contribute to success in learning?`,
+    `Can you share a personal experience where you demonstrated ${word?.toLowerCase() || "this quality"}?`,
+    `Why is ${word?.toLowerCase() || "this quality"} important in everyday life?`,
   ];
 
   return (
