@@ -5,13 +5,16 @@ interface WordCardProps {
   word: string;
   definition: string;
   examples: string[];
+  partOfSpeech: string;
 }
 
-const WordCard = ({ word, definition, examples }: WordCardProps) => {
+const WordCard = ({ word, definition, examples, partOfSpeech }: WordCardProps) => {
   return (
     <Card className="w-full max-w-2xl bg-secondary animate-fade-in">
       <CardHeader>
-        <CardTitle className="text-3xl font-bold text-primary">{word}</CardTitle>
+        <CardTitle className="text-3xl font-bold text-primary">
+          {word} <span className="text-lg text-gray-600 italic">({partOfSpeech})</span>
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="bg-white p-4 rounded-lg shadow-sm">
