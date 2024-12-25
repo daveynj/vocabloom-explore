@@ -13,17 +13,30 @@ const VocabularyQuiz = ({ word, correctDefinition, options, grammarFeedback = {}
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [feedback, setFeedback] = useState<string>("");
-  const [currentOptions, setCurrentOptions] = useState(options);
+  const [currentOptions, setCurrentOptions] = useState(() => shuffleArray([...options]));
+
+  // Fisher-Yates shuffle algorithm
+  const shuffleArray = (array: string[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
 
   const generateNewOptions = () => {
     // Create new options by shuffling and slightly modifying existing ones
-    const newOptions = [...options].map(option => {
+    const newOptions = options.map(option => {
       if (option === correctDefinition) return option;
-      return option.includes(word) ? 
-        option.replace(word, `the ${word}`) : 
-        `${word} ${option.toLowerCase()}`;
+      // Generate different incorrect options
+      const variations = [
+        `${word} ${option.toLowerCase()}`,
+        `the ${word} ${option.toLowerCase()}`,
+        `${option.replace(word, word + 's')}`,
+      ];
+      return variations[Math.floor(Math.random() * variations.length)];
     });
-    setCurrentOptions(newOptions);
+    setCurrentOptions(shuffleArray(newOptions));
   };
 
   const handleAnswer = (answer: string) => {
@@ -58,12 +71,13 @@ const VocabularyQuiz = ({ word, correctDefinition, options, grammarFeedback = {}
     setSelectedAnswer(null);
     setIsCorrect(null);
     setFeedback("");
+    generateNewOptions();
   };
 
   return (
     <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-sm space-y-6">
       <h2 className="text-2xl font-bold text-center mb-6 text-primary">
-        What is the correct usage of "{word}"?
+        Which is correct?
       </h2>
       <div className="grid grid-cols-1 gap-4">
         {currentOptions.map((option, index) => (
