@@ -71,12 +71,12 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-secondary/50 py-8 px-4">
-      <div className="container mx-auto space-y-12">
-        <h1 className="text-4xl font-bold text-center text-primary mb-8">
+      <div className="container mx-auto space-y-12 flex flex-col items-center">
+        <h1 className="text-4xl font-bold text-center text-primary">
           ESL Vocabulary Practice
         </h1>
 
-        <div className="flex flex-col items-center gap-4">
+        <div className="flex flex-col items-center gap-4 w-full">
           <WordCard
             word={currentWord.word}
             definition={currentWord.definition}
@@ -101,6 +101,7 @@ const Index = () => {
         <VocabularyArticle 
           word={currentWord.word}
           definition={currentWord.definition}
+          partOfSpeech={currentWord.partOfSpeech}
         />
       </div>
     </div>
