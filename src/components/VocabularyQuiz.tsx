@@ -6,9 +6,10 @@ interface QuizProps {
   word: string;
   correctDefinition: string;
   options: string[];
+  grammarFeedback?: { [key: string]: string };
 }
 
-const VocabularyQuiz = ({ word, correctDefinition, options }: QuizProps) => {
+const VocabularyQuiz = ({ word, correctDefinition, options, grammarFeedback = {} }: QuizProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
@@ -20,7 +21,11 @@ const VocabularyQuiz = ({ word, correctDefinition, options }: QuizProps) => {
     if (correct) {
       toast.success("Correct! Well done!");
     } else {
-      toast.error("Incorrect. Try again!");
+      if (grammarFeedback[answer]) {
+        toast.error(grammarFeedback[answer]);
+      } else {
+        toast.error("Incorrect. Try again!");
+      }
     }
   };
 

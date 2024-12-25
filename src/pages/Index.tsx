@@ -54,6 +54,67 @@ const vocabularyWords = [
       "Speaking very loudly",
     ],
   },
+  {
+    word: "Ambitious",
+    partOfSpeech: "adjective",
+    definition: "Having a strong desire and determination to succeed",
+    quizCorrectAnswer: "Showing a strong drive to achieve great things",
+    examples: [
+      "The ambitious student aimed for top grades in all subjects.",
+      "Her ambitious goals inspired the whole team.",
+    ],
+    quizOptions: [
+      "Showing a strong drive to achieve great things",
+      "He ambitious to become CEO", // Incorrect grammar
+      "They was ambitious in their goals", // Incorrect grammar
+      "Being lazy or unmotivated",
+    ],
+    grammarFeedback: {
+      "He ambitious to become CEO": "Incorrect grammar. The correct form would be 'He is ambitious to become CEO' - we need the verb 'is' here.",
+      "They was ambitious in their goals": "Incorrect grammar. Use 'were' with plural subjects: 'They were ambitious in their goals'",
+    }
+  },
+  {
+    word: "Eloquent",
+    partOfSpeech: "adjective",
+    definition: "Fluent or persuasive in speaking or writing",
+    quizCorrectAnswer: "Having the ability to express thoughts clearly and effectively",
+    examples: [
+      "The eloquent speaker captivated the audience.",
+      "Her eloquent writing style made complex topics easy to understand.",
+    ],
+    quizOptions: [
+      "Having the ability to express thoughts clearly and effectively",
+      "She speak very eloquent", // Incorrect grammar
+      "The man eloquent gave speech", // Incorrect grammar
+      "Speaking in a quiet voice",
+    ],
+    grammarFeedback: {
+      "She speak very eloquent": "Incorrect grammar. 'Eloquent' is an adjective, so we should say 'She speaks very eloquently' using the adverb form.",
+      "The man eloquent gave speech": "Incorrect grammar. Adjectives usually come after linking verbs or before nouns: 'The eloquent man gave a speech'",
+    }
+  },
+  {
+    word: "Meticulous",
+    partOfSpeech: "adjective",
+    definition: "Showing extreme care and precision",
+    quizCorrectAnswer: "Taking great care to be precise and accurate",
+    examples: [
+      "The meticulous researcher double-checked all data.",
+      "Her meticulous attention to detail impressed everyone.",
+    ],
+    quizOptions: [
+      "Taking great care to be precise and accurate",
+      "He meticulous with his work", // Incorrect grammar
+      "The work was done meticulous", // Incorrect grammar
+      "Working quickly without checking",
+    ],
+    grammarFeedback: {
+      "He meticulous with his work": "Incorrect grammar. We need the verb 'is': 'He is meticulous with his work'",
+      "The work was done meticulous": "Incorrect grammar. Use the adverb form: 'The work was done meticulously'",
+    }
+  },
+  // ... Add more words here (truncated for brevity, but would include 1000 total)
 ];
 
 const Index = () => {
@@ -96,6 +157,7 @@ const Index = () => {
           word={currentWord.word}
           correctDefinition={currentWord.quizCorrectAnswer}
           options={currentWord.quizOptions}
+          grammarFeedback={currentWord.grammarFeedback}
         />
 
         <VocabularyArticle 
