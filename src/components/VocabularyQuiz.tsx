@@ -9,20 +9,21 @@ interface QuizProps {
   grammarFeedback?: { [key: string]: string };
 }
 
+// Fisher-Yates shuffle algorithm
+const shuffleArray = (array: string[]) => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
 const VocabularyQuiz = ({ word, correctDefinition, options, grammarFeedback = {} }: QuizProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [feedback, setFeedback] = useState<string>("");
   const [currentOptions, setCurrentOptions] = useState(() => shuffleArray([...options]));
-
-  // Fisher-Yates shuffle algorithm
-  const shuffleArray = (array: string[]) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
 
   const generateNewOptions = () => {
     // Create new options by shuffling and slightly modifying existing ones
