@@ -10,22 +10,39 @@ const Index = () => {
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [vocabularyWords, setVocabularyWords] = useState([]);
   const [quizzes, setQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [score, setScore] = useState({ correct: 0, incorrect: 0 });
 
   // Fetch vocabulary words
   useEffect(() => {
     const fetchWords = async () => {
-      const { data, error } = await supabase
-        .from('vocabulary_words')
-        .select('*');
-      
-      if (error) {
-        console.error('Error fetching words:', error);
-        toast.error('Failed to load vocabulary words');
-        return;
+      console.log('Fetching vocabulary words...');
+      try {
+        const { data, error } = await supabase
+          .from('vocabulary_words')
+          .select('*');
+        
+        if (error) {
+          console.error('Error fetching words:', error);
+          toast.error('Failed to load vocabulary words');
+          setLoading(false);
+          return;
+        }
+        
+        console.log('Fetched words:', data);
+        if (data && data.length > 0) {
+          setVocabularyWords(data);
+          setLoading(false);
+        } else {
+          console.log('No vocabulary words found');
+          toast.error('No vocabulary words available');
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Unexpected error:', err);
+        toast.error('An unexpected error occurred');
+        setLoading(false);
       }
-      
-      setVocabularyWords(data);
     };
 
     fetchWords();
@@ -34,28 +51,43 @@ const Index = () => {
   // Fetch quizzes for current word
   useEffect(() => {
     const fetchQuizzes = async () => {
-      if (!vocabularyWords[currentWordIndex]) return;
-
-      const { data, error } = await supabase
-        .from('quizzes')
-        .select('*')
-        .eq('word_id', vocabularyWords[currentWordIndex].id);
-      
-      if (error) {
-        console.error('Error fetching quizzes:', error);
-        toast.error('Failed to load quizzes');
+      if (!vocabularyWords[currentWordIndex]) {
+        console.log('No current word available for fetching quizzes');
         return;
       }
-      
-      setQuizzes(data);
+
+      console.log('Fetching quizzes for word:', vocabularyWords[currentWordIndex].word);
+      try {
+        const { data, error } = await supabase
+          .from('quizzes')
+          .select('*')
+          .eq('word_id', vocabularyWords[currentWordIndex].id);
+        
+        if (error) {
+          console.error('Error fetching quizzes:', error);
+          toast.error('Failed to load quizzes');
+          return;
+        }
+        
+        console.log('Fetched quizzes:', data);
+        if (data) {
+          setQuizzes(data);
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching quizzes:', err);
+        toast.error('Failed to load quizzes');
+      }
     };
 
-    fetchQuizzes();
+    if (vocabularyWords.length > 0) {
+      fetchQuizzes();
+    }
   }, [currentWordIndex, vocabularyWords]);
 
   const handleNextWord = () => {
     setCurrentWordIndex((prevIndex) => {
       const nextIndex = (prevIndex + 1) % vocabularyWords.length;
+      console.log('Moving to next word:', vocabularyWords[nextIndex]?.word);
       toast.success(`New word: ${vocabularyWords[nextIndex]?.word}`);
       return nextIndex;
     });
@@ -68,9 +100,29 @@ const Index = () => {
     }));
   };
 
-  const currentWord = vocabularyWords[currentWordIndex];
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-secondary/50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold mb-2">Loading...</h2>
+          <p className="text-muted-foreground">Please wait while we fetch your vocabulary content</p>
+        </div>
+      </div>
+    );
+  }
 
-  if (!currentWord) return <div>Loading...</div>;
+  if (!vocabularyWords.length) {
+    return (
+      <div className="min-h-screen bg-secondary/50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-semibold mb-2">No vocabulary words available</h2>
+          <p className="text-muted-foreground">Please try again later</p>
+        </div>
+      </div>
+    );
+  }
+
+  const currentWord = vocabularyWords[currentWordIndex];
 
   return (
     <div className="min-h-screen bg-secondary/50 py-8 px-4">
@@ -104,7 +156,7 @@ const Index = () => {
         
         {quizzes.map((quiz, index) => (
           <VocabularyQuiz
-            key={`${quiz.id}-${currentWordIndex}`}
+            key={`${quiz.id}-${currentWordIndex}-${index}`}
             word={currentWord.word}
             correctDefinition={quiz.options[quiz.correct_answer]}
             options={quiz.options}
