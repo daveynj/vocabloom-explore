@@ -45,6 +45,7 @@ export type Database = {
           id: string
           options: Json
           question: string
+          quiz_type: string
           word_id: string | null
         }
         Insert: {
@@ -53,6 +54,7 @@ export type Database = {
           id?: string
           options: Json
           question: string
+          quiz_type?: string
           word_id?: string | null
         }
         Update: {
@@ -61,6 +63,7 @@ export type Database = {
           id?: string
           options?: Json
           question?: string
+          quiz_type?: string
           word_id?: string | null
         }
         Relationships: [

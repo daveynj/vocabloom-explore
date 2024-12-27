@@ -6,10 +6,12 @@ interface QuizProps {
   word: string;
   correctDefinition: string;
   options: string[];
+  question: string;
+  quizType: string;
+  onQuizComplete: (isCorrect: boolean) => void;
   grammarFeedback?: { [key: string]: string };
 }
 
-// Fisher-Yates shuffle algorithm
 const shuffleArray = (array: string[]) => {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
@@ -19,45 +21,42 @@ const shuffleArray = (array: string[]) => {
   return newArray;
 };
 
-const VocabularyQuiz = ({ word, correctDefinition, options, grammarFeedback = {} }: QuizProps) => {
+const VocabularyQuiz = ({ 
+  word, 
+  correctDefinition, 
+  options, 
+  question,
+  quizType,
+  onQuizComplete,
+  grammarFeedback = {} 
+}: QuizProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [feedback, setFeedback] = useState<string>("");
   const [currentOptions, setCurrentOptions] = useState(() => shuffleArray([...options]));
 
   const generateNewOptions = () => {
-    // Create new options by shuffling and slightly modifying existing ones
-    const newOptions = options.map(option => {
-      if (option === correctDefinition) return option;
-      // Generate different incorrect options
-      const variations = [
-        `${word} ${option.toLowerCase()}`,
-        `the ${word} ${option.toLowerCase()}`,
-        `${option.replace(word, word + 's')}`,
-      ];
-      return variations[Math.floor(Math.random() * variations.length)];
-    });
-    setCurrentOptions(shuffleArray(newOptions));
+    setCurrentOptions(shuffleArray([...options]));
   };
 
   const handleAnswer = (answer: string) => {
     setSelectedAnswer(answer);
     const correct = answer === correctDefinition;
     setIsCorrect(correct);
+    onQuizComplete(correct);
     
     if (correct) {
       toast.success("Correct! Well done!");
-      setFeedback("Great job! You've mastered the correct usage of this word.");
+      setFeedback(`Great job! You've mastered this ${quizType} question.`);
     } else {
       if (grammarFeedback[answer]) {
         setFeedback(grammarFeedback[answer]);
-        toast.error("Incorrect. Check the feedback below and try the new question!");
-        generateNewOptions(); // Generate new options for another try
+        toast.error("Incorrect. Check the feedback below!");
       } else {
-        setFeedback("That's not quite right. Try again with a new set of options.");
+        setFeedback(`That's not quite right. Try another ${quizType} question.`);
         toast.error("Incorrect. Try again!");
-        generateNewOptions();
       }
+      generateNewOptions();
     }
   };
 
@@ -77,9 +76,14 @@ const VocabularyQuiz = ({ word, correctDefinition, options, grammarFeedback = {}
 
   return (
     <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-sm space-y-6">
-      <h2 className="text-2xl font-bold text-center mb-6 text-primary">
-        Which is correct?
-      </h2>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold text-primary">
+          {quizType.charAt(0).toUpperCase() + quizType.slice(1)} Quiz
+        </h2>
+      </div>
+
+      <p className="text-lg mb-4">{question}</p>
+
       <div className="grid grid-cols-1 gap-4">
         {currentOptions.map((option, index) => (
           <Button
