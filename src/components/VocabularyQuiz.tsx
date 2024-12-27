@@ -1,6 +1,8 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import QuizHeader from "./quiz/QuizHeader";
+import QuizOptions from "./quiz/QuizOptions";
+import QuizFeedback from "./quiz/QuizFeedback";
 
 interface QuizProps {
   word: string;
@@ -60,13 +62,6 @@ const VocabularyQuiz = ({
     }
   };
 
-  const getButtonClass = (option: string) => {
-    if (!selectedAnswer) return "bg-white hover:bg-gray-50 text-gray-800 border-2 border-gray-200";
-    if (option === correctDefinition) return "bg-success text-success-foreground font-semibold";
-    if (option === selectedAnswer) return "bg-error text-error-foreground font-semibold";
-    return "bg-white text-gray-800 border-2 border-gray-200";
-  };
-
   const resetQuiz = () => {
     setSelectedAnswer(null);
     setIsCorrect(null);
@@ -76,40 +71,20 @@ const VocabularyQuiz = ({
 
   return (
     <div className="w-full max-w-2xl p-6 bg-white rounded-lg shadow-sm space-y-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-primary">
-          {quizType.charAt(0).toUpperCase() + quizType.slice(1)} Quiz
-        </h2>
-      </div>
-
-      <p className="text-lg mb-4">{question}</p>
-
-      <div className="grid grid-cols-1 gap-4">
-        {currentOptions.map((option, index) => (
-          <Button
-            key={index}
-            onClick={() => handleAnswer(option)}
-            disabled={selectedAnswer !== null}
-            className={`w-full min-h-[80px] p-4 text-left text-base leading-relaxed whitespace-normal break-words ${getButtonClass(option)}`}
-          >
-            {option}
-          </Button>
-        ))}
-      </div>
+      <QuizHeader quizType={quizType} question={question} />
       
-      {feedback && (
-        <div className="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <p className="text-gray-700">{feedback}</p>
-          {!isCorrect && (
-            <Button 
-              onClick={resetQuiz}
-              className="mt-4 w-full"
-            >
-              Try New Question
-            </Button>
-          )}
-        </div>
-      )}
+      <QuizOptions
+        options={currentOptions}
+        selectedAnswer={selectedAnswer}
+        correctDefinition={correctDefinition}
+        onSelectAnswer={handleAnswer}
+      />
+      
+      <QuizFeedback
+        feedback={feedback}
+        isCorrect={isCorrect}
+        onReset={resetQuiz}
+      />
     </div>
   );
 };
